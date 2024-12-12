@@ -48,3 +48,25 @@ cd lms-frontend
   ```
   npm install @reduxjs/toolkit react-redux react-router-dom react-icons react-chartjs-2 chart.js daisyui axios react-hot-toast @tailwindcss/line-clamp
  ```
+
+ ### Configure auto import sort eslint
+ 1. install simple import sort
+   ```
+      npm i eslint-plugin-simple-import-sort
+   ```
+2. Add rule in `.eslint.cjs`
+   ```
+      'simple-import-sort/imports': 'error'
+   ```
+3. Add simple-import sort  plugin `eslint.config.js`
+   ```
+     plugins :[..., 'simple-import-sort']
+   ```
+4. To enable auto import sort on file save in vs code
+      -open `setting.json`
+      -Add to the following config
+    ```
+       "editor.codeActiondOnSave" : {
+        "source.fixAll.eslint" : true
+       }
+    ```

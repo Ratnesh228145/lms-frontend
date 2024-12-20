@@ -1,10 +1,19 @@
 import {AiFillCloseCircle} from 'react-icons/ai';
 import {FiMenu} from 'react-icons/fi';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import Footer from '../Components/Footer';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 function HomeLayout ({children}){
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    // for checking if user is logged in
+    const isLoggedIn = useSelector((state)=> state?.auth?.isLoggedIn);
+
+    //for displaying the option acc to role
+    const role = useSelector((state)=> state?.auth?.role);
 
     function changeWidth(){
         const drawerSide = document.getElementsByClassName("drawer-side");
@@ -17,6 +26,15 @@ function HomeLayout ({children}){
 
         const drawerSide = document.getElementsByClassName("drawer-side");
         drawerSide[0].style.width = 0;
+    }
+
+    function handleLogout(e){
+        e.preventDefault();
+
+        //const res = await dispatch(logout());
+        // if(res?.payload?.success)
+
+        navigate("/");
     }
 
     return (
@@ -34,7 +52,7 @@ function HomeLayout ({children}){
                 </div>
                 <div className="drawer-side w-0">
                     <label htmlFor="my-drawer" className='drawer-overlay'></label>
-                    <ul className="menu p-4 w-48 sm:w-80 bg-base-100 text-base-content relative">
+                    <ul className="menu p-4 w-48 sm:w-80 bg-base-100 text-base-content relative ">
                         <li className="w-fit absolute right-2 z-50">
                             <button onClick={hideDrower}>
                                 <AiFillCloseCircle size={24} />
@@ -43,6 +61,11 @@ function HomeLayout ({children}){
                         <li>
                             <Link to="/">Home</Link>
                         </li>
+                        {isLoggedIn && role === 'ADMIN' && (
+                            <li>
+                                <Link to="/admin/dashboard" >Admin DashBoard</Link>
+                            </li>
+                        )}
                         <li>
                             <Link to="/courses">All Courses</Link>
                         </li>
@@ -52,6 +75,31 @@ function HomeLayout ({children}){
                         <li>
                             <Link to="/about">About us</Link>
                         </li>
+                           { !isLoggedIn && (
+                            <li className='static bottom-4 w-[90%'>
+                              <div className=" w-full flex items-center justify-center">
+                                  <button className=" btn btn-primary px-4 py-1 flex-col font-semibold rounded-md  ">
+                                      <Link to='/login'>Login</Link>
+                                  </button>
+                                  <button className="btn btn-secondary px-4 py-1 font-semibold rounded-md  ">
+                                      <Link to='/login'>Singnup</Link>
+                                  </button>
+                              </div>
+                            </li>
+                           )}
+
+                        { isLoggedIn && (
+                            <li className="static bottom-4 w-[90%">
+                              <div className="w-full flex items-center justify-center">
+                                  <button className='btn-primary px-4 py-1 font-semibold rounded-md w-full'>
+                                      <Link to='/user/profile'>Profile</Link>
+                                  </button>
+                                  <button className='btn-secondary px-4 py-1 font-semibold rounded-md w-full'>
+                                      <Link to={handleLogout}>Logout</Link>
+                                  </button>
+                              </div>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </div>

@@ -33,8 +33,10 @@ function HomeLayout ({children}){
         e.preventDefault();
 
         const res = await dispatch(logout());
-         if(res?.payload?.success)
+         if(res?.payload?.success){
             navigate("/");
+         }
+           
     }
 
     return (
